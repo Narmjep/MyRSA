@@ -7,7 +7,7 @@ set(DEP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
 file(GLOB sources src/*.cpp)
 file(GLOB includes src/*.h)
 
-option(BUILD_STATIC FALSE)
+option(BUILD_STATIC TRUE)
 
 if(NOT BUILD_STATIC)
 message("Building dll")
