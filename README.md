@@ -1,4 +1,5 @@
-# BUILD
+# MyRSA
+A simple Library that defines the enryption methods used in Encryptor.
 
 ## CMake Project
 This project can be built directly using ```cmake . && make```.
