@@ -1,0 +1,2 @@
+E:\mingw-w64\mingw64\bin\ar.exe qc libMyRSA.a CMakeFiles/MyRSA.dir/src/MyRSA.cpp.obj CMakeFiles/MyRSA.dir/src/char.cpp.obj CMakeFiles/MyRSA.dir/src/ppcm_pgcd.cpp.obj
+E:\mingw-w64\mingw64\bin\ranlib.exe libMyRSA.a

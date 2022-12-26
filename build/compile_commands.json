@@ -1,0 +1,17 @@
+[
+{
+  "directory": "E:/Coding/MyRSA/build",
+  "command": "E:\\mingw-w64\\mingw64\\bin\\g++.exe  @CMakeFiles/MyRSA.dir/includes_CXX.rsp -g -o CMakeFiles\\MyRSA.dir\\src\\MyRSA.cpp.obj -c E:\\Coding\\MyRSA\\src\\MyRSA.cpp",
+  "file": "E:/Coding/MyRSA/src/MyRSA.cpp"
+},
+{
+  "directory": "E:/Coding/MyRSA/build",
+  "command": "E:\\mingw-w64\\mingw64\\bin\\g++.exe  @CMakeFiles/MyRSA.dir/includes_CXX.rsp -g -o CMakeFiles\\MyRSA.dir\\src\\char.cpp.obj -c E:\\Coding\\MyRSA\\src\\char.cpp",
+  "file": "E:/Coding/MyRSA/src/char.cpp"
+},
+{
+  "directory": "E:/Coding/MyRSA/build",
+  "command": "E:\\mingw-w64\\mingw64\\bin\\g++.exe  @CMakeFiles/MyRSA.dir/includes_CXX.rsp -g -o CMakeFiles\\MyRSA.dir\\src\\ppcm_pgcd.cpp.obj -c E:\\Coding\\MyRSA\\src\\ppcm_pgcd.cpp",
+  "file": "E:/Coding/MyRSA/src/ppcm_pgcd.cpp"
+}
+]
