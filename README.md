@@ -1,5 +1,5 @@
 # MyRSA
-A simple Library that defines the enryption methods used in [Encryptor](https://github.com/Narmjep/EncryptorCMDL).
+A simple Library that defines the encryption methods used in [Encryptor](https://github.com/Narmjep/EncryptorCMDL).
 
 ## CMake Project
 This project can be built directly using ```cmake . && make```.
