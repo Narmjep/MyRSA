@@ -12,6 +12,9 @@ static std::vector<int> getMinPrimes(int N) {
 
 RSA::Key::Key(std::string path) {
     std::ifstream keyfile(path);
+    if(keyfile.good() == false){
+        std::cerr << "Incorrect filestream: " << path << std::endl;
+    }
     json data;
     keyfile >> data;
 
@@ -21,7 +24,7 @@ RSA::Key::Key(std::string path) {
 }
 
 bool RSA::CreateKeys(size_t range, int publicKey[2], int privateKey[2]) {
-
+    if(range < 17) range = 17;
     int p;
     int q;
     int N;
@@ -72,10 +75,7 @@ bool RSA::CreateKeys(size_t range, int publicKey[2], int privateKey[2]) {
     for (int i = 7; i < range; i++) {
         eprimes = decompose(i);
         if (checkIfCommonInt(kprimes, eprimes) == false) {
-            //e = i;
-            //break;
             evalues.push_back(i);
-            
         }
     }
 
@@ -140,7 +140,6 @@ bool RSA::EncryptMessage(int input[], int output[], size_t size, int pub[2]) {
     for (int i = 0; i < size; i++) {
 
         m = input[i];
-        //std::cout << "m: " << m << "\n";
         c = pow_mod(m, e, n);
         output[i] = c;
     }
@@ -158,7 +157,6 @@ bool RSA::EncryptMessage(int input[], int output[], size_t size, RSA::Key& key) 
     for (int i = 0; i < size; i++) {
 
         m = input[i];
-        //std::cout << "m: " << m << "\n";
         c = pow_mod(m, e, n);
         output[i] = c;
     }
