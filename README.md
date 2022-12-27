@@ -18,4 +18,4 @@ target_link_libraries(Main MyRSA::MyRSA)
 ```
 When building a shared library, make sure to include it in your binary directory.
 
-When building with CMake, the option "BUILD_STATIC" can be set to FALSE by passing the argument: ```cmake -DBUILD_STATIC=FALSE .``` to cmake.
+When building with CMake, the option "MyRSA_BUILD_SHARED" can be set to "TRUE" by passing the argument: ```cmake -DMyRSA_BUILD_SHARED=TRUE .``` to cmake.
