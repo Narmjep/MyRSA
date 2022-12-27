@@ -1,5 +1,5 @@
 #include "ppcm_pgcd.h"
-
+#include <unordered_set>
 
 
 
@@ -23,28 +23,23 @@ void spell (std::vector<int> vec, const std::string& name){
 
 //Get Primes
 std::vector<int> getprimes(int L){
-
-    //Calculating Prime numbers
-    std::vector<int> list;
-    list.push_back(2);
-    bool prim = false;
-    for (int i=3;i<=L;i++){
-        prim = true;
-
-
-        for (int n = 0; n < list.size(); n++){
-            if (i%list[n] == 0){
-                prim = false;
-            }  
-        }
-        if (prim == true){
-            list.push_back(i);
+    //Create bitset
+    std::vector<bool> primes(L+1,true);
+    //Seive algortihm
+    for(int i = 2; i <= L; i++){
+        if(!primes[i]) continue;
+        //set multiples of prime number to not prime
+        for(int j = i*2; j <= L; j+=i){
+            primes[j] = 0;
         }
     }
 
-
-    //Convert Vector to array
-    return list;
+    //Create vector for compatibility reasons
+    std::vector<int> result;
+    for(int i = 2; i <= L; i++){
+        if(primes[i]) result.push_back(i);
+    }
+    return result;
 }
 
 //Check if prime
@@ -63,37 +58,22 @@ bool checkprime (int N){
 //Decompose
 
 std::vector<int> decompose(int N){
-
     std::vector<int> comp;
-
-        if (checkprime(N) == true){
-            comp.push_back(N);
-  
-        }
-
-        else {
-            int X = N;
-            while (checkprime(X)==false){
-                std::vector<int> primes = getprimes(N);
-                for (int i = 0; i <= primes.size();i++){
-                    if (X%primes[i] == 0){
-                        comp.push_back(primes[i]);
-
-
-                        X= X/primes[i];
-                        break;
-                    }
-                }
+    //Check if N is a prime number
+    if (checkprime(N) == true){
+        comp.push_back(N);
+    }
+    else {
+        std::vector<int> primes = getprimes(std::sqrt(N));
+        for(int i = 0; i < primes.size(); i++){
+            while(N % primes[i] == 0){
+                comp.push_back(primes[i]);
+                N /= primes[i];
             }
-            comp.push_back(X);
 
+            if(N == 1) break;
         }
-
-
-    //Resize vector
-
-    
-
+    }
     return comp;
 }
 
@@ -137,12 +117,12 @@ std::vector<int> frequency (std::vector<int> comp){
 
 //Cehck if two vectors contain similar elements
 bool checkIfCommonInt(std::vector<int> vec1 , std::vector<int> vec2){
-    for (int i=0;i<vec1.size();i++){
-        for (int j=0;j<vec2.size();j++){
-            if(vec1[i]==vec2[j]){
-                return true;
-            }
-        }
+    std::unordered_set<int> set1_hash;
+    for(int i : vec1){
+        set1_hash.insert(i);
+    }
+    for(int i : vec2){
+        if(set1_hash.count(i) > 0) return true;
     }
     return false;
 }
@@ -199,10 +179,6 @@ int PGCD (int N1 , int N2){
         pgcd = pgcd*pow(common[i],powers[i]);
     }
 
-
-
-
-
     return pgcd;
 }
 
@@ -218,12 +194,12 @@ int PPCM (int N1 , int N2){
 
 
     //Get all primes
-        std::vector<int> common = decompose(N1);
-        for (int i=0; i<comp2.size();i++){
-            common.push_back(comp2[i]);
-        }
-        std::sort(common.begin(),common.end());
-        common.erase(unique(common.begin(),common.end()),common.end());
+    std::vector<int> common = decompose(N1);
+    for (int i=0; i<comp2.size();i++){
+        common.push_back(comp2[i]);
+    }
+    std::sort(common.begin(),common.end());
+    common.erase(unique(common.begin(),common.end()),common.end());
 
     //Get highest frequency
     std::vector<int> powers;
