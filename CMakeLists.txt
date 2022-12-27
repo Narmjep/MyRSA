@@ -7,9 +7,9 @@ set(DEP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
 file(GLOB sources src/*.cpp)
 file(GLOB includes src/*.h)
 
-option(BUILD_STATIC TRUE)
+option(MyRSA_BUILD_SHARED TRUE)
 
-if(NOT BUILD_STATIC)
+if(${MyRSA_BUILD_SHARED})
 message("Building dll")
 add_library(MyRSA SHARED ${sources})
 else()
