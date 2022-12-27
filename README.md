@@ -6,7 +6,7 @@ This project can be built directly using ```cmake . && make```.
 
 ## CMake Package
 It can also be installed by using ```make install``` instead of ```make```.
-Additionally, the package can also be added directly to the build tree without installing it either by building the package and using the following code: 
+Additionally, the package can also be added directly to the build tree without installing it, by building the package and using the following code: 
 ```cmake
 find_package(MyRSA PATHS path/to/MyRSA/)
 #Include headers
