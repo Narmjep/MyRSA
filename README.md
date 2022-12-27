@@ -16,6 +16,6 @@ target_include_directories(MyProject PRIVATE ${MyRSA_INCLUDE_DIRS})
 #Link Library
 target_link_libraries(Main MyRSA::MyRSA)
 ```
-When building a Shared library, make sure to include it in your binary directory.
+When building a shared library, make sure to include it in your binary directory.
 
 When building with CMake, the option "BUILD_STATIC" can be set to FALSE by passing the argument: ```cmake -DBUILD_STATIC=FALSE .``` to cmake.
