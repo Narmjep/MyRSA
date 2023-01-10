@@ -64,6 +64,40 @@ namespace RSA {
 	/// @param N 
 	/// @param x 
 	/// @return true on success, false on failure
-	bool WriteKeyFile(std::string path, std::string type, int N, int x);
+	bool WriteKeyFile(const std::string& path, std::string type, int N, int x);
+
+	//Optimization
+	
+	namespace Optimization {
+
+		/**
+		 * @brief 
+		 * 
+		 * @param path 
+		 * @return true 
+		 * @return false 
+		 */
+		bool CompositionExists(const std::ifstream& file, int number);
+
+		/**
+		 * @brief 
+		 * 
+		 * @param path 
+		 * @param begin 
+		 * @param end 
+		 * @return true 
+		 * @return false 
+		 */
+		bool WritePrimeDecompositionToFile(const std::string& path, int begin, int end);
+	
+		/**
+		 * @brief 
+		 * 
+		 * @param path 
+		 * @param number 
+		 * @return std::vector<int> 
+		 */
+		std::vector<int> DeserializePrimeCompositionFile(std::string path, int number);
+	};
 	
 };

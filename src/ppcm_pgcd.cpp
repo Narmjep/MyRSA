@@ -97,9 +97,7 @@ void printMultiples(int N, int range){
 
 //Get Frequencies
 std::vector<int> frequency (std::vector<int> comp){
-
     std::vector<int> freq;
-
     int prev = 0;
     for (int i=0;i<comp.size();i++){
 
@@ -130,7 +128,7 @@ bool checkIfCommonInt(std::vector<int> vec1 , std::vector<int> vec2){
 //PGCD & PPCM
 
 
-int PGCD (int N1 , int N2){
+int LCD (int N1 , int N2){
     std::vector<int> comp1 = decompose(N1);
     std::vector<int> freq1 = frequency(comp1);
     std::vector<int> comp2 = decompose(N2);
@@ -139,7 +137,6 @@ int PGCD (int N1 , int N2){
 
     comp1.erase(unique(comp1.begin(),comp1.end()),comp1.end());
     comp2.erase(unique(comp2.begin(),comp2.end()),comp2.end());
-
 
     //Get common primes
     for (int i=0;i<comp1.size();i++){
@@ -182,7 +179,7 @@ int PGCD (int N1 , int N2){
     return pgcd;
 }
 
-int PPCM (int N1 , int N2){
+int SCM (int N1 , int N2){
     std::vector<int> comp1 = decompose(N1);
     std::vector<int> freq1 = frequency(comp1);
     std::vector<int> comp2 = decompose(N2);
@@ -240,11 +237,6 @@ int PPCM (int N1 , int N2){
     for (int i=0;i<common.size();i++){
         pgcd = pgcd*pow(common[i],powers[i]);
     }
-
-
-
-
-
     return pgcd;
 }
 

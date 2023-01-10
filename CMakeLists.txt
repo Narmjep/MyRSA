@@ -4,17 +4,17 @@ project(MyRSA)
 
 set(DEP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
 
-file(GLOB sources src/*.cpp)
+file(GLOB MyRSA_SOURCES src/*.cpp)
 file(GLOB includes src/*.h)
 
-option(MyRSA_BUILD_SHARED FALSE)
+option(MyRSA_BUILD_SHARED TRUE)
 
 if(${MyRSA_BUILD_SHARED})
 message("Building dll")
-add_library(MyRSA SHARED ${sources})
+add_library(MyRSA SHARED ${MyRSA_SOURCES})
 else()
 message("Building static library")
-add_library(MyRSA STATIC ${sources})
+add_library(MyRSA STATIC ${MyRSA_SOURCES})
 endif()
 
 add_library(MyRSA::MyRSA ALIAS MyRSA)
