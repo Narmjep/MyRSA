@@ -177,7 +177,7 @@ bool RSA::DecryptMessage(int input[], int output[], size_t size, int priv[2]) {
 
 //Json
 
-bool RSA::WriteKeyFile(std::string path, std::string type, int N, int x) {
+bool RSA::WriteKeyFile(const std::string& path, const std::string& type, int N, int x) {
     std::ofstream keyfile(path);
     json Key =
     {
@@ -201,7 +201,7 @@ static void inline writeToFile(std::ofstream& file, int number){
 static int inline readValueFromFile(std::ifstream& file){
     char buffer[sizeof(int)];
     file.read(buffer, sizeof(int));
-    return reinterpret_cast<int>(buffer);
+    return *reinterpret_cast<int*>(buffer); //!
 }
 
 bool RSA::Optimization::CompositionExists(std::ifstream& file, int number){
@@ -247,10 +247,20 @@ std::vector<int> RSA::Optimization::DeserializePrimeCompositionFile(std::string 
     int counter = 0;
     inputFile.seekg(std::ios::beg);
     int current = readValueFromFile(inputFile);
+    inputFile.seekg(sizeof(int), std::ios::cur);
     while(current != number){
-        int bytesToSkip;
+        size_t bytesToSkip = readValueFromFile(inputFile) * sizeof(int);
+        inputFile.seekg(bytesToSkip, std::ios::cur);
         current++;
     }
+    //Read composition
+    size_t size = readValueFromFile(inputFile);
+    for(int i = 0; i < size; i++){
+        int value = readValueFromFile(inputFile);
+        ret.push_back(value);
+    }
+
+    return ret;
 
 
 

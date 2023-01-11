@@ -64,7 +64,7 @@ namespace RSA {
 	/// @param N 
 	/// @param x 
 	/// @return true on success, false on failure
-	bool WriteKeyFile(const std::string& path, std::string type, int N, int x);
+	bool WriteKeyFile(const std::string& path, const std::string& type, int N, int x);
 
 	//Optimization
 	
@@ -77,7 +77,7 @@ namespace RSA {
 		 * @return true 
 		 * @return false 
 		 */
-		bool CompositionExists(const std::ifstream& file, int number);
+		bool CompositionExists(std::ifstream& file, int number);
 
 		/**
 		 * @brief 
