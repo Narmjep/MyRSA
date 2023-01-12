@@ -40,8 +40,21 @@ bool checkIfCommonInt(std::vector<int> vec1, std::vector<int> vec2);
 
 //PGCD & PPCM
 
+/**
+ * @brief returns the largest common divisor of N1 and N2
+ * 
+ * @param N1 
+ * @param N2 
+ * @return int 
+ */
+int LCD(int N1, int N2);
 
-int PGCD(int N1, int N2);
-
-int PPCM(int N1, int N2);
+/**
+ * @brief returns the smallest common multiple of N1 and N2
+ * 
+ * @param N1 
+ * @param N2 
+ * @return int 
+ */
+int SCM(int N1, int N2);
 
