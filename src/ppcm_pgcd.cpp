@@ -1,15 +1,6 @@
 #include "ppcm_pgcd.h"
 #include <unordered_set>
 
-
-
-
-
-
-
-//---------------------------
-//Functions:
-
 //Print vector
 
 void spell (std::vector<int> vec, const std::string& name){
@@ -19,7 +10,6 @@ void spell (std::vector<int> vec, const std::string& name){
     }
     std::cout<<std::endl;
 }
-
 
 //Get Primes
 std::vector<int> getprimes(int L){
@@ -33,7 +23,6 @@ std::vector<int> getprimes(int L){
             primes[j] = 0;
         }
     }
-
     //Create vector for compatibility reasons
     std::vector<int> result;
     for(int i = 2; i <= L; i++){
@@ -43,7 +32,6 @@ std::vector<int> getprimes(int L){
 }
 
 //Check if prime
-
 bool checkprime (int N){
     std::vector<int> primes = getprimes(N);
     for (int i= 0;i < primes.size();i++ ){
@@ -54,9 +42,7 @@ bool checkprime (int N){
     return false;
 }
 
-
 //Decompose
-
 std::vector<int> decompose(int N){
     std::vector<int> comp;
     //Check if N is a prime number
@@ -109,7 +95,6 @@ std::vector<int> frequency (std::vector<int> comp){
         }
         prev = comp[i];
     }
-
     return freq;
 }
 
@@ -141,11 +126,8 @@ int LCD (int N1 , int N2){
     //Get common primes
     for (int i=0;i<comp1.size();i++){
         for (int k=0;k<comp2.size();k++){
-
             if (comp1[i]==comp2[k]){
-
                 common.push_back(comp1[i]);
-
             }
         }
     }
@@ -170,13 +152,11 @@ int LCD (int N1 , int N2){
         }
     }
     //Final result
-    int pgcd = 1;
-
+    int lcd = 1;
     for (int i=0;i<common.size();i++){
-        pgcd = pgcd*pow(common[i],powers[i]);
+        lcd = lcd*pow(common[i],powers[i]);
     }
-
-    return pgcd;
+    return lcd;
 }
 
 int SCM (int N1 , int N2){
@@ -185,10 +165,8 @@ int SCM (int N1 , int N2){
     std::vector<int> comp2 = decompose(N2);
     std::vector<int> freq2 = frequency(comp2);
 
-
     comp1.erase(unique(comp1.begin(),comp1.end()),comp1.end());
     comp2.erase(unique(comp2.begin(),comp2.end()),comp2.end());
-
 
     //Get all primes
     std::vector<int> common = decompose(N1);
@@ -202,7 +180,6 @@ int SCM (int N1 , int N2){
     std::vector<int> powers;
 
     for (int i=0;i<common.size();i++){
-
         int index;
         int fr1;
         int index2;
@@ -222,7 +199,6 @@ int SCM (int N1 , int N2){
         } else{
             fr2 = 0;
         }
-    
 
         if (fr1 >= fr2){
             powers.push_back(fr1);
@@ -232,12 +208,11 @@ int SCM (int N1 , int N2){
     }
 
     //Final result
-    int pgcd = 1;
-
+    int scm = 1;
     for (int i=0;i<common.size();i++){
-        pgcd = pgcd*pow(common[i],powers[i]);
+        scm = scm*pow(common[i],powers[i]);
     }
-    return pgcd;
+    return scm;
 }
 
 

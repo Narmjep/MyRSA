@@ -218,8 +218,14 @@ bool RSA::Optimization::WritePrimeDecompositionToFile(const std::string& path, i
     writeToFile(outputFile, begin);
     writeToFile(outputFile, end);
     std::vector<int> composition;
+    int progress = 0;
+    int range = end - begin;
     for (int i = begin; i <= end; i++) {
-        std::cout << "Current: " << i << '\n';
+        int newProgress = (i - begin) * 100 / (end - begin);
+        if(newProgress - progress >= 10) {
+            progress = newProgress;
+            std::cout << "Progress: " << progress << "%\n";
+        }
         composition = decompose(i);
         writeToFile(outputFile,composition.size());
         for(auto number : composition){
