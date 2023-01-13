@@ -87,18 +87,19 @@ bool RSA::CreateKeys(size_t range, int publicKey[2], int privateKey[2]) {
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop-start);
     std::cout << "Decomposition duration: " << duration.count() << '\n';
 
-    int random = rand() % evalues.size();
-    e = evalues[random];
-
     //Get D
-    std::vector<int> emult = multiples(e, k);
-
-    for (int i = 1; i <= k; i++) {
-        if (emult[i] % k == 1) {
-            d = i;
-            break;
+    do{
+        int random = rand() % evalues.size();
+        e = evalues[random];
+        std::vector<int> emult = multiples(e, k);
+        for (int i = 0; i <= k; i++) {
+            if (emult[i] % k == 1) {
+                d = i;
+                break;
+            }
         }
-    }
+    } while(d == 0);
+
 
     //Generate Keys
     pub[0] = N;
