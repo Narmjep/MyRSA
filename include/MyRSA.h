@@ -5,6 +5,8 @@
 #include <fstream>
 #include <iomanip>
 
+#define SMALLEST_RANGE_VALUE 7
+#define DEFAULT_DATA_FILE_NAME "data.bin"
 
 
 using json = nlohmann::json;
@@ -71,33 +73,39 @@ namespace RSA {
 	namespace Optimization {
 
 		/**
-		 * @brief 
+		 * @brief Loads the content of the data file to memory. Call this before calling GetCompositionFromData(int number) or CompositionEcists(int number).
 		 * 
-		 * @param path 
-		 * @return true 
-		 * @return false 
+		 * @param dataFile An input stream from the data file
+		 * @return true on success, otherwise fale
 		 */
-		bool CompositionExists(std::ifstream& file, int number);
+		bool LoadDataFileToMemory(const std::string& dataFile);
+
+		/// @brief Frees the content of the data file
+		void FreeData();
+
+		/// @brief Verifies that the compostion of the number is contained in the data file
+		/// @param number the number to be verified
+		/// @return true if it is contained, otherwise false
+		bool CompositionExists(int number);
 
 		/**
-		 * @brief 
+		 * @brief Writes the composition of a range of number to a data file
 		 * 
-		 * @param path 
-		 * @param begin 
-		 * @param end 
-		 * @return true 
-		 * @return false 
+		 * @param path The path to the output file
+		 * @param begin first number included
+		 * @param end last number included
+		 * @return true on success
+		 * @return false on failure
 		 */
 		bool WritePrimeDecompositionToFile(const std::string& path, int begin, int end);
 	
 		/**
-		 * @brief 
+		 * @brief Get the prime decomposition of a number from a data file. Make sure to load the file into memory fist using LoadDataFileToMemory(std::ifstream dataFile).
 		 * 
-		 * @param path 
 		 * @param number 
-		 * @return std::vector<int> 
+		 * @return std::vector<int> vector containing the decomposition
 		 */
-		std::vector<int> DeserializePrimeCompositionFile(std::string path, int number);
+		std::vector<int> GetCompositionFromData(int number);
 	};
 	
 };

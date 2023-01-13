@@ -1,0 +1,4 @@
+Fixed Optimization
+
+data file content will be loaded into memory to reduce disk i/o operations
+decompose function was broken. Should be fixed now.

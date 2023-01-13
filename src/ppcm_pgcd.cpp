@@ -59,6 +59,7 @@ std::vector<int> decompose(int N){
 
             if(N == 1) break;
         }
+        if(N != 1 && checkprime(N)) comp.push_back(N);
     }
     return comp;
 }
@@ -131,7 +132,6 @@ int LCD (int N1 , int N2){
             }
         }
     }
-
 
     //Get lowest frequency
     std::vector<int> powers;

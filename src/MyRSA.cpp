@@ -1,4 +1,5 @@
 #include "MyRSA.h"
+#include <chrono>
 
 static std::vector<int> getMinPrimes(int N) {
     std::vector<int> returnlist = getprimes(N);
@@ -61,19 +62,38 @@ bool RSA::CreateKeys(size_t range, int publicKey[2], int privateKey[2]) {
     std::vector<int> evalues;
     kprimes = decompose(k);
 
-    for (int i = 7; i < range; i++) {
-        eprimes = decompose(i);
-        if (checkIfCommonInt(kprimes, eprimes) == false) {
-            evalues.push_back(i);
+    //Check if precalculated
+    auto start = std::chrono::high_resolution_clock::now();
+    if(RSA::Optimization::LoadDataFileToMemory(DEFAULT_DATA_FILE_NAME) && RSA::Optimization::CompositionExists(range - 1)){
+        std::cout << "Using optimization\n";
+        for (int i = SMALLEST_RANGE_VALUE; i < range; i++) {
+            eprimes = RSA::Optimization::GetCompositionFromData(i);
+            if (checkIfCommonInt(kprimes, eprimes) == false) {
+                evalues.push_back(i);
+            }
+        }
+    } else {
+        std::cout << "No precalculated values found.\n";
+        for (int i = SMALLEST_RANGE_VALUE; i < range; i++) {
+            eprimes = decompose(i);
+            if (checkIfCommonInt(kprimes, eprimes) == false) {
+                evalues.push_back(i);
+            }
         }
     }
+    RSA::Optimization::FreeData();
+
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop-start);
+    std::cout << "Decomposition duration: " << duration.count() << '\n';
+
     int random = rand() % evalues.size();
     e = evalues[random];
 
     //Get D
     std::vector<int> emult = multiples(e, k);
 
-    for (int i = 0; i <= k; i++) {
+    for (int i = 1; i <= k; i++) {
         if (emult[i] % k == 1) {
             d = i;
             break;
@@ -193,25 +213,76 @@ bool RSA::WriteKeyFile(const std::string& path, const std::string& type, int N, 
 
 
 //Optimization
+static size_t dataSize;
 
 static void inline writeToFile(std::ofstream& file, int number){
     file.write(reinterpret_cast<char*>(&number) , sizeof(number));
 }
 
-static int inline readValueFromFile(std::ifstream& file){
+static int inline readValueFromArray(std::ifstream& file){
     char buffer[sizeof(int)];
     file.read(buffer, sizeof(int));
-    return *reinterpret_cast<int*>(buffer); //!
+    return *reinterpret_cast<int*>(buffer);
 }
 
-bool RSA::Optimization::CompositionExists(std::ifstream& file, int number){
-    file.seekg(std::ios::beg);
-    int begin = readValueFromFile(file); //read first
-    int end = readValueFromFile(file); // read second
+static const char* readDataFile(std::ifstream& inputFile){
+    inputFile.seekg(0, std::ios::end);
+    size_t fileSize = inputFile.tellg();
+    inputFile.seekg(0, std::ios::beg);
+    char* fileData = new char[fileSize];
+    dataSize = fileSize;
+    inputFile.read(fileData, fileSize);
+    return fileData;
+}
+
+static inline bool dataNotLoaded(){
+    std::cerr << "No data file has been loaded to memory. Use RSA::Optimization::LoadDataFileToMemory(str::string& path) before calling this method!\n";
+    return false;
+}
+
+/*
+    Data file format:
+    Offset(4 bytes)     Value
+    0                   range begin
+    1                   range end
+    2                   size n0 composition
+    3                   n0 composition 1
+    4                   n0 composition 2
+    ...
+    x                   size n2 composition
+    ...
+*/
+
+static const int* data = nullptr;
+
+#define isDataLoaded (data != nullptr)
+
+bool RSA::Optimization::LoadDataFileToMemory(const std::string& path){
+    std::ifstream inputFile(path);
+    if(!inputFile.good()){
+        std::cerr << "File " << path << " does not exist.\n";
+        return false;
+    }
+    const char* content = readDataFile(inputFile);
+    data = reinterpret_cast<const int*>(content);
+    return true;
+    
+}
+
+void RSA::Optimization::FreeData(){
+    delete[] data;
+}
+
+bool RSA::Optimization::CompositionExists(int number){
+    //Check if data loaded
+    if(!isDataLoaded) return dataNotLoaded();
+    int begin = data[0]; //read first
+    int end = data[1]; // read second
     if( begin > number || number > end) return false;
     else return true;
 }
 
+//TODO Speed up
 bool RSA::Optimization::WritePrimeDecompositionToFile(const std::string& path, int begin, int end){
     std::ofstream outputFile(path, std::ios::binary);
     //Write range of file
@@ -236,45 +307,35 @@ bool RSA::Optimization::WritePrimeDecompositionToFile(const std::string& path, i
     return true;
 }
 
-std::vector<int> RSA::Optimization::DeserializePrimeCompositionFile(std::string path, int number){
-    std::ifstream inputFile(path, std::ios::binary);
+std::vector<int> RSA::Optimization::GetCompositionFromData(int number){
     std::vector<int> ret;
-    //File exists?
-    if(!inputFile.good()){
-        std::cerr << "File " << path << " does not exist.\n";
+    //Check if data loaded
+    if(!isDataLoaded){
+        dataNotLoaded();
         return ret;
     }
-    //Number in file?
-    if(!CompositionExists(inputFile, number)){
-        std::cout << path << " does not contain the composition of "<< number << '\n';
-        return ret;
-    }
-    
+    const int* dataCpy = data;
     int counter = 0;
-    inputFile.seekg(std::ios::beg);
-    int current = readValueFromFile(inputFile);
-    inputFile.seekg(sizeof(int), std::ios::cur);
+    int current = dataCpy[0];
+    dataCpy += 2;
     while(current != number){
-        size_t bytesToSkip = readValueFromFile(inputFile) * sizeof(int);
-        inputFile.seekg(bytesToSkip, std::ios::cur);
+        size_t intsToSkip = *dataCpy;
+        dataCpy += intsToSkip + 1;
         current++;
     }
     //Read composition
-    size_t size = readValueFromFile(inputFile);
+    size_t size = *dataCpy;
+    dataCpy++;
     for(int i = 0; i < size; i++){
-        int value = readValueFromFile(inputFile);
+        int value = *dataCpy;
         ret.push_back(value);
+        dataCpy++;
     }
-
+    //Cleanup
     return ret;
-
-
-
-    
-    
-
-
 }
+
+
 
 
 
