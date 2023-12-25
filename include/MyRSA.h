@@ -1,5 +1,5 @@
 #pragma once
-#include "ppcm_pgcd.h"
+#include "myrsa_math.h"
 #include <vector>
 #include "json.hpp"
 #include <fstream>
@@ -78,7 +78,7 @@ namespace RSA {
 		 * @param dataFile An input stream from the data file
 		 * @return true on success, otherwise fale
 		 */
-		bool LoadDataFileToMemory(const std::string& dataFile);
+		bool LoadCacheFileToMemory(const std::string& dataFile);
 
 		/// @brief Frees the content of the data file
 		void FreeData();
@@ -86,7 +86,7 @@ namespace RSA {
 		/// @brief Verifies that the compostion of the number is contained in the data file
 		/// @param number the number to be verified
 		/// @return true if it is contained, otherwise false
-		bool CompositionExists(int number);
+		bool CompositionExistsInCache(int number);
 
 		/**
 		 * @brief Writes the composition of a range of number to a data file
@@ -100,12 +100,23 @@ namespace RSA {
 		bool WritePrimeDecompositionToFile(const std::string& path, int begin, int end);
 	
 		/**
-		 * @brief Get the prime decomposition of a number from a data file. Make sure to load the file into memory fist using LoadDataFileToMemory(std::ifstream dataFile).
+		 * @brief Get the prime decomposition of a number from a data file. Make sure to load the file into memory fist using LoadCacheFileToMemory(std::ifstream dataFile).
 		 * 
 		 * @param number 
 		 * @return std::vector<int> vector containing the decomposition
 		 */
-		std::vector<int> GetCompositionFromData(int number);
+		std::vector<int> GetPrimeDecompositionFromCache(int number);
+
+		/**
+		 * @brief Get the range of the data file
+		 * 
+		 * @param path path to the data file
+		 * @param begin the begin of the range will be stored here
+		 * @param end the end of the range will be stored here
+		 * @return true if the file exists and the range was read successfully
+		 * @return false otherwise
+		 */
+		bool GetCacheRange(int& begin, int& end);
 	};
 	
 };

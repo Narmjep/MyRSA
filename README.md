@@ -11,7 +11,6 @@ Additionally, the package can also be added directly to the build tree without i
 find_package(MyRSA PATHS path/to/MyRSA/)
 #Include headers
 get_target_property(MyRSA_INCLUDE_DIRS MyRSA::MyRSA INTERFACE_INCLUDE_DIRECTORIES)
-message("Include dirs: "${MyRSA_INCLUDE_DIRS})
 target_include_directories(MyProject PRIVATE ${MyRSA_INCLUDE_DIRS})
 #Link Library
 target_link_libraries(Main MyRSA::MyRSA)
