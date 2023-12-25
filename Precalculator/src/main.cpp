@@ -17,8 +17,10 @@ int main(int argc, char** argv){
         if(argc > 1) range = std::stoi(argv[1]);
     } catch(...){
         std::cerr << "Invalid argument.\n";
+        return -1;
     }
     std::cout << "Generating prime decomposition for numbers from " << START << " to " << range << "..." << std::endl;
     RSA::Optimization::WritePrimeDecompositionToFile("data.bin", START, range);
     std::cout << "Done." << std::endl;
+    return 0;
 }
